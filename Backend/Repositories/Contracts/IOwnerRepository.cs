@@ -6,5 +6,6 @@ namespace Simple.GraphQL.Backend.Contracts
     {
         IEnumerable<Owner> GetAll();
         Owner GetById(Guid id);
+        Owner CreateOwner(Owner owner);
     }
 }

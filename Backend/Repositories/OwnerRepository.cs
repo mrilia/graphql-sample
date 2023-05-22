@@ -15,5 +15,12 @@ namespace Simple.GraphQL.Backend.Repository
 
         public IEnumerable<Owner> GetAll() => _context.Owners.ToList();
         public Owner GetById(Guid id) => _context.Owners.SingleOrDefault(o => o.Id.Equals(id));
+        public Owner CreateOwner(Owner owner)
+        {
+            owner.Id = Guid.NewGuid();
+            _context.Add(owner);
+            _context.SaveChanges();
+            return owner;
+        }
     }
 }
