@@ -1,10 +1,10 @@
 using GraphQL;
+using GraphQL.DataLoader;
 using GraphQL.MicrosoftDI;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Simple.GraphQL.Backend.Contracts;
 using Simple.GraphQL.Backend.GraphQL.GraphQLSchema;
-using Simple.GraphQL.Backend.GraphQL.GraphQLTypes;
 using Simple.GraphQL.Backend.Models.Context;
 using Simple.GraphQL.Backend.Repository;
 
@@ -16,6 +16,8 @@ builder.Services.AddDbContext<AccountContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
+builder.Services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
+builder.Services.AddSingleton<DataLoaderDocumentListener>();
 
 builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -26,7 +28,9 @@ builder.Services.AddGraphQL(options =>
                     {
                         opt.EnableMetrics = true;
                         return next(opt);
-                    }).AddSystemTextJson()
+                    })
+                    .AddSystemTextJson()
+                    .AddDataLoader()
                 );
 
 builder.Services.AddCors(options =>
