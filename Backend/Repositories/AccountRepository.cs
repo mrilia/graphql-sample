@@ -1,4 +1,5 @@
 using Simple.GraphQL.Backend.Contracts;
+using Simple.GraphQL.Backend.Models;
 using Simple.GraphQL.Backend.Models.Context;
 
 namespace Simple.GraphQL.Backend.Repository
@@ -11,5 +12,9 @@ namespace Simple.GraphQL.Backend.Repository
         {
             _context = context;
         }
+
+        public IEnumerable<Account> GetAllAccountsPerOwner(Guid ownerId) => _context.Accounts
+        .Where(a => a.OwnerId.Equals(ownerId))
+        .ToList();
     }
 }
